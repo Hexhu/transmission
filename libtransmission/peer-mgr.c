@@ -2080,7 +2080,7 @@ static bool myHandshakeDoneCB(tr_handshake* handshake, tr_peerIo* io, bool readA
             atom->flags |= ADDED_F_UTP_FLAGS;
         }
 
-        if ((atom->flags2 & MYFLAG_BANNED) != 0)
+        if (((atom->flags2 & MYFLAG_BANNED) != 0) | tr_peerMgrClientIsBanned(peer_id))
         {
             tordbg(s, "banned peer %s tried to reconnect", tr_atomAddrStr(atom));
         }
@@ -4364,4 +4364,16 @@ static void makeNewPeerConnections(struct tr_peerMgr* mgr, int const max)
     }
 
     tr_free(candidates);
+}
+
+bool
+tr_peerMgrClientIsBanned (const uint8_t * peer_id)
+{
+    if (peer_id == NULL) return false;
+    bool banned = false;
+    banned |= !memcmp(peer_id+1, "SD", 2);
+    banned |= !memcmp(peer_id+1, "XL", 2);
+    //if (banned)
+    //  tr_logAddNamedError ("Client banned.", "(Client filter)");
+    return banned;
 }

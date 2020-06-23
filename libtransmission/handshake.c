@@ -271,6 +271,9 @@ static handshake_parse_err_t parseHandshake(tr_handshake* handshake, struct evbu
     handshake->havePeerID = true;
     dbgmsg(handshake, "peer-id is [%*.*s]", PEER_ID_LEN, PEER_ID_LEN, peer_id);
 
+    /* Error if the client is banned. */
+    if (tr_peerMgrClientIsBanned(peer_id)) return HANDSHAKE_ENCRYPTION_WRONG;
+
     tor = tr_torrentFindFromHash(handshake->session, hash);
 
     if (memcmp(peer_id, tr_torrentGetPeerId(tor), PEER_ID_LEN) == 0)

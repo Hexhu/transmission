@@ -136,4 +136,7 @@ void tr_peerMgrGotBadPiece(tr_torrent* tor, tr_piece_index_t pieceIndex);
 
 void tr_peerMgrPieceCompleted(tr_torrent* tor, tr_piece_index_t pieceIndex);
 
+/* Check if the client is banned. XunLei is banned because it never uploads.*/
+bool tr_peerMgrClientIsBanned(const uint8_t* peer_id);
+
 /* @} */
